@@ -4,6 +4,7 @@ import Layout from '../molecules/Layout'
 import InspectObject from '../utils/InspectObject'
 import PendingPrrrs from '../molecules/PendingPrrrs'
 import ClaimedPrrrs from '../molecules/ClaimedPrrrs'
+import './LoggedInHomePage.sass'
 
 export default class LoggedInHomePage extends Component {
   render(){
