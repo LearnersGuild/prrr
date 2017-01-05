@@ -4,11 +4,15 @@ import Layout from '../molecules/Layout'
 import InspectObject from '../utils/InspectObject'
 import PendingPrrrs from '../molecules/PendingPrrrs'
 import ClaimedPrrrs from '../molecules/ClaimedPrrrs'
+import DashboardPrrrs from '../molecules/DashboardPrrrs'
+import './LoggedInHomePage.sass'
 
 export default class LoggedInHomePage extends Component {
   render(){
     const { session, prrrs=[] } = this.props
     return <Layout className="HomePage" session={session}>
+
+      <DashboardPrrrs />
 
       <h1>Pull Requests Waiting For Review:</h1>
       <PendingPrrrs
