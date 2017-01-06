@@ -7,6 +7,7 @@ import GithubUsername from '../../atoms/GithubUsername'
 import PrrrsTable from '../PrrrsTable'
 import unclaimPrrr from '../../../actions/unclaimPrrr'
 import completePrrr from '../../../actions/completePrrr'
+import './index.sass'
 
 
 export default class PersonalClaimedPrrrs extends Component {
@@ -56,7 +57,7 @@ export default class PersonalClaimedPrrrs extends Component {
       .filter(prrr => prrr.claimed_by === this.props.currentUser.github_username)
 
       return <PrrrsTable
-        className="ClaimedPrrrs"
+        className="PersonalClaimedPrrrs"
         currentUser={this.props.currentUser}
         prrrs={prrrs}
         renderAdditionalHeaders={this.renderAdditionalHeaders}
