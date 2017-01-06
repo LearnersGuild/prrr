@@ -44,7 +44,7 @@ export default class PrrrsTable extends Component {
         </td>
         {renderAdditionalCells(prrr)}
         <td>
-          <Button onClick={_ => confirmDestroyPrrr(href, prrr)} disabled={!requrestByCurrentUser}>
+          <Button className="button-danger" onClick={_ => confirmDestroyPrrr(href, prrr)} disabled={!requrestByCurrentUser}>
             <Icon type="times" />
           </Button>
         </td>
