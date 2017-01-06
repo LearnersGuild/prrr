@@ -6,6 +6,7 @@ import Button from '../../atoms/Button'
 import GithubUsername from '../../atoms/GithubUsername'
 import PrrrsTable from '../PrrrsTable'
 import unclaimPrrr from '../../../actions/unclaimPrrr'
+import './index.sass'
 
 export default class ClaimedPrrrs extends Component {
   static propTypes = {
@@ -32,7 +33,7 @@ export default class ClaimedPrrrs extends Component {
         <Date fromNow date={prrr.claimed_at} />
       </td>,
       <td key="actions">
-        <Button onClick={_ => unclaimPrrr(prrr.id)} disabled={!claimedByCurrentUser}>
+        <Button className="button-warning"onClick={_ => unclaimPrrr(prrr.id)} disabled={!claimedByCurrentUser}>
           Unclaim
         </Button>
       </td>,

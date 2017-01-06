@@ -12,8 +12,6 @@ export default class LoggedInHomePage extends Component {
     const { session, prrrs=[] } = this.props
     return <Layout className="HomePage" session={session}>
 
-      <DashboardPrrrs />
-
       <h1>Pull Requests Waiting For Review:</h1>
       <PendingPrrrs
         currentUser={session.user}

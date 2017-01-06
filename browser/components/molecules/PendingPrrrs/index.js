@@ -5,6 +5,7 @@ import Button from '../../atoms/Button'
 import PrrrsTable from '../PrrrsTable'
 import ErrorMessage from '../../atoms/ErrorMessage'
 import claimPrrr from '../../../actions/claimPrrr'
+import './index.sass'
 
 export default class PendingPrrrs extends Component {
   static propTypes = {
@@ -42,7 +43,7 @@ export default class PendingPrrrs extends Component {
     const disabled = prrr.requested_by === currentUser.github_username
     return [
       <td key="actions">
-        <Button onClick={_ => this.claimPrrr(prrr)} disabled={disabled}>
+        <Button className="button-success"onClick={_ => this.claimPrrr(prrr)} disabled={disabled}>
           Claim
         </Button>
       </td>,
