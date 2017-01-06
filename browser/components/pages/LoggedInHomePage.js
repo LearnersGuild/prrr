@@ -9,9 +9,13 @@ import PersonalClaimedPrrrs from '../molecules/PersonalClaimedPrrrs'
 export default class LoggedInHomePage extends Component {
   render(){
     const { session, prrrs=[] } = this.props
+    console.log('user-->', session.user.github_username)
     return <Layout className="HomePage" session={session}>
-
-      <h1> Personal Prrrs: </h1>
+      <h1>
+        <span>{session.user.github_username}'s</span>
+        &nbsp;
+        prrrs:
+      </h1>
       <PersonalClaimedPrrrs
         currentUser={session.user}
         prrrs={prrrs}
