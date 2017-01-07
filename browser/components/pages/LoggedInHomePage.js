@@ -1,26 +1,29 @@
 import React, { Component } from 'react'
 import Button from '../atoms/Button'
+import Link from '../atoms/Link'
 import Layout from '../molecules/Layout'
 import InspectObject from '../utils/InspectObject'
-import PendingPrrrs from '../molecules/PendingPrrrs'
-import ClaimedPrrrs from '../molecules/ClaimedPrrrs'
+import PersonalClaimedPrrrs from '../molecules/PersonalClaimedPrrrs'
 
 export default class LoggedInHomePage extends Component {
   render(){
+    console.log(prrrs)
     const { session, prrrs=[] } = this.props
+    const claimedPrrr = prrrs.find( prrr => prrr.claimed_by === session.user.github_username )
+    const topSection = claimedPrrr
+      ? <div> <h3> Pending Review </h3>
+          <PersonalClaimedPrrrs
+            currentUser={session.user}
+            prrrs={prrrs}
+          />
+      </div>
+      : <div> <Button href="/all"> Claim a Prrr </Button> </div>
     return <Layout className="HomePage" session={session}>
-
-      <h1>Pull Requests Waiting For Review:</h1>
-      <PendingPrrrs
-        currentUser={session.user}
-        prrrs={prrrs}
-      />
-
-      <h1>Claimed Pull Requests:</h1>
-      <ClaimedPrrrs
-        currentUser={session.user}
-        prrrs={prrrs}
-      />
+      <div className="HomePage-SectionOne">
+        <span className="HomePage-Text"> Welcome back {session.user.github_username} </span>
+         {topSection}
+      </div>
+      <Link className="HomePage-Link"href='/all'> View All </Link>
     </Layout>
   }
 }
