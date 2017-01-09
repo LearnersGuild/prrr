@@ -1,12 +1,14 @@
 import express from 'express'
 import Commands from '../commands'
 import Queries from '../queries'
+import Statistics from '../statistics'
 
 const router = new express.Router()
 
 router.use((req, res, next) => {
   req.queries = new Queries(req.user)
   req.commands = new Commands(req.user)
+  req.statistics = new Statistics()
   next()
 })
 
@@ -79,6 +81,11 @@ router.post('/pull-request-review-requests/:prrrId/complete', (req, res, next) =
     .catch(next)
 });
 
+router.get('/statistics', (req, res) => {
+  req.queries.getAllPrrrs()
+    .then(result => res.json( result ))
+});
+
 router.get('/statistics/csv', (req, res) => {
   Promise.all([
     req.queries.getPrrrColumns(),
@@ -86,6 +93,11 @@ router.get('/statistics/csv', (req, res) => {
   ])
   .then(([ columns, result ]) => res.csv([ Object.keys(columns), ...result ]))
 });
+
+router.get('/statistics/:stat', (req, res) => {
+  req.statistics[ req.params.stat ]( req.query )
+    .then( result => res.json( result ))
+})
 
 // error handlers
 
