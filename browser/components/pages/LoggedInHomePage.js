@@ -23,6 +23,12 @@ export default class LoggedInHomePage extends Component {
         prrrs={prrrs}
       />
 
+      <h1>Timeline of Pull Requests:</h1>
+      <Timeline
+        currentUser={session.user}
+        prrrs={prrrs}
+      />
+
     </Layout>
   }
 }
