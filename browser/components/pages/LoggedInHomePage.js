@@ -4,6 +4,7 @@ import Layout from '../molecules/Layout'
 import InspectObject from '../utils/InspectObject'
 import PendingPrrrs from '../molecules/PendingPrrrs'
 import ClaimedPrrrs from '../molecules/ClaimedPrrrs'
+import Timeline from '../molecules/Timeline'
 
 export default class LoggedInHomePage extends Component {
   render(){
@@ -21,6 +22,7 @@ export default class LoggedInHomePage extends Component {
         currentUser={session.user}
         prrrs={prrrs}
       />
+
     </Layout>
   }
 }
