@@ -23,7 +23,7 @@ export default class Timeline extends Component {
             {prrr.owner}
           </Link>
         </td>
-        <StatusBar></StatusBar>
+        <StatusBar prrrs={prrrs} currentUser={currentUser}></StatusBar>
       </tr>
 
     })
