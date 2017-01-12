@@ -1,4 +1,4 @@
-describe('Commands', function(){
+describe.only('Commands', function(){
 
   describe('createUser', function(){
     it('should insert a user into the database', function(){
@@ -170,13 +170,41 @@ describe('Commands', function(){
               })
             })
           })
-
-
         })
-
+      })
+    })
+    describe('interacting with prrrs', function(){
+      context('Claiming an existing prrr', function(){
+        beforeEach(function(){
+          let prrrOwnerUserAttributes = {
+            name: 'Abraham',
+            email: 'jhnfgie1989@gmail.com',
+            avatar_url: 'https://avatars.githubusercontent.com/u/15825329?v=3',
+            github_id: 15825329,
+            github_username: 'AbrahamFerguson',
+            github_access_token: 'FAKE_GITHUB_ACCESS_TOKEN',
+            github_refresh_token: null,
+          }
+          commands.createUser(prrrOwnerUserAttributes)
+          return commands.createRecord('pull_request_review_requests',{
+            id: 5,
+            owner: 'AbrahamFergie',
+            repo: 'floworky',
+            number: 42,
+            requested_by: 'AbrahamFerguson',
+            created_at: new Date,
+            updated_at: new Date,
+            archived_at: new Date,
+          })
+        })
+        it('markPullRequestAsClaimed', function(){
+          return commands.claimPrrr(5)
+            .then( prrr => {
+              expect(prrr.claimed_by).to.eql('nicosesma')
+              expect(prrr.claimed_at).to.be.a('date')
+          })
+        })
       })
     })
   })
-
-
 })
