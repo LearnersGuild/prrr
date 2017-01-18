@@ -23,9 +23,13 @@ export default class PrrrsTable extends Component {
       renderAdditionalCells,
       renderAdditionalHeaders,
     } = this.props
+
     const rows = prrrs.map(prrr => {
+
       const requestByCurrentUser = prrr.requested_by === currentUser.github_username
+
       const href = `https://github.com/${prrr.owner}/${prrr.repo}/pull/${prrr.number}`
+
       return <tr key={prrr.id}>
         <td>
           <Link href={href} target="_blank">
@@ -50,6 +54,8 @@ export default class PrrrsTable extends Component {
         </td>
       </tr>
     })
+
+
     return <table className={`PrrrsTable ${this.props.className||''}`}>
       <thead>
         <tr>
