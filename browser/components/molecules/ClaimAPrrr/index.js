@@ -10,8 +10,8 @@ import completePrrr from '../../../actions/completePrrr'
 import unclaimPrrr from '../../../actions/unclaimPrrr'
 import GithubUsername from '../../atoms/GithubUsername'
 import Date from '../../atoms/Date'
+import Timer from '../../atoms/Timer'
 import './index.sass'
-
 
 export default class ClaimAPrrr extends Component {
   static propTypes = {
@@ -46,6 +46,9 @@ class UserClaimedAPrrr extends Component {
         <Link href={href} target="_blank">
           {claimedPrrr.owner}/{claimedPrrr.repo}
         </Link>
+      </div>
+      <div>
+        <Timer claimedPrrr={claimedPrrr} />
       </div>
       <div>
         <Button
