@@ -1,31 +1,21 @@
 import React, { Component } from 'react'
-import sadCat1 from '../../images/sadcat1.gif'
-import sadCat2 from '../../images/sadcat2.gif'
-import sadCat3 from '../../images/sadcat3.gif'
-import sadCat4 from '../../images/sadcat4.gif'
+import cat1 from '../../images/sadcat1.gif'
+import cat2 from '../../images/sadcat2.gif'
+import cat3 from '../../images/sadcat3.gif'
+import cat4 from '../../images/sadcat4.gif'
 import Link from '../atoms/Link'
 import './NotFoundPage.sass'
+const sadCats = [ cat1, cat2, cat3, cat4 ]
 
 export default class NotFoundPage extends Component {
 
-  whichSadCat() {
-    let num = Math.floor( Math.random() * 4 )
-    if ( num === 0 ) {
-      return sadCat1
-    }
-    else if ( num === 1 ) {
-      return sadCat2
-    }
-    else if ( num === 2 ) {
-      return sadCat3
-    }
-    else {
-      return sadCat4
-    }
-  }
+whichSadCat() {
+  let sadCat = sadCats[ Math.floor( Math.random() * sadCats.length )]
+  return sadCat
+}
 
   render(){
-    // console.log("hmmmm", this.whichSadCat())
+    const sadCat = sadCats[ Math.floor( Math.random() * sadCats.length )]
     return <div className="NotFoundPage">
       <div className="header">
         <Link className="hompageLink" href="/"><h2>Home</h2></Link>
