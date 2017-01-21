@@ -101,7 +101,7 @@ class CreatePrrrForm extends Component {
       </span>
       </div>
       <div className="RequestReviewPage-ButtonDiv">
-        <button className="RequestReviewPage-Button" type="submit">Add Prrr</button>
+        <Button className="Button-primary RequestReviewPage-btn" type="submit">Add Prrr</Button>
       </div>
     </form>
   }

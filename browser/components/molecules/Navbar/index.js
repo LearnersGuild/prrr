@@ -20,7 +20,7 @@ export default class Navbar extends Component {
           <img src={favicon} className="Navbar-favicon" />
         </Button>
         &nbsp;
-        <Button className="Navbar-button-add-prrr" href="/request"> Add a Prrr </Button>
+        <Button className="Button-primary" href="/request"> Add a Prrr </Button>
         <Link href="/metrics">Metrics</Link>
       </div>
       <div>
@@ -29,7 +29,7 @@ export default class Navbar extends Component {
       <div>
         <span>{user.name}</span>
         <Avatar user={user} />
-        <Button className="Navbar-button-logout" onClick={logout}>Logout</Button>
+        <Button className="Button-danger" onClick={logout}>Logout</Button>
       </div>
     </div>
   }
