@@ -1,9 +1,12 @@
 import path from 'path'
 import winston from 'winston'
 
-process.env.LOG_LEVEL = process.env.LOG_LEVEL || (process.env.NODE_ENV === 'development'
-  ? 'silly'
-  : 'warn'
+process.env.LOG_LEVEL = process.env.LOG_LEVEL || (
+  process.env.NODE_ENV === 'development'
+    ? 'silly'
+    : process.env.NODE_ENV === 'test'
+      ? 'silly'
+      : 'warn'
 )
 const LOG_DIRECTORY = path.resolve(__dirname, '../../log')
 
