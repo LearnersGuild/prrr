@@ -73,3 +73,5 @@ export const withUsersInTheDatabase = callback => {
     callback()
   })
 }
+
+export const jsonify = object => JSON.parse(JSON.stringify(object))
