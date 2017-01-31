@@ -230,6 +230,74 @@ describe('Commands', function(){
       })
     })
 
+    describe('claimPrrr', function() {
+
+      it('should return the oldest unclaimed Prrr', function() {
+        const now = moment()
+        const timeAgo = (number, unit) => now.clone().subtract(number, unit).toDate()
+
+        const insertPrrr = attributes =>
+          knex
+            .insert(attributes)
+            .into('pull_request_review_requests')
+            .returning('*')
+
+        const getAllPrrrs = () =>
+          knex
+            .select('*')
+            .from('pull_request_review_requests')
+            .orderBy('created_at', 'asc')
+
+        return Promise.all([
+          insertPrrr({
+            id: 33,
+            owner: 'anasauce',
+            repo: 'prrr-so-meta',
+            number: 45,
+            requested_by: 'anasauce',
+            created_at: timeAgo(4, 'hours'),
+            updated_at: timeAgo(4, 'hours'),
+            claimed_by: null,
+            claimed_at: null,
+          }),
+          insertPrrr({
+            id: 34,
+            owner: 'ykatz',
+            repo: 'prrr-be-awesome',
+            number: 45,
+            requested_by: 'anasauce',
+            created_at: timeAgo(3, 'hours'),
+            updated_at: timeAgo(50, 'minutes'),
+            claimed_by: null,
+            claimed_at: null,
+          }),
+          insertPrrr({
+            id: 35,
+            owner: 'deadlyicon',
+            repo: 'prrr-forevah',
+            number: 45,
+            requested_by: 'deadlyicon',
+            created_at: timeAgo(2, 'hours'),
+            updated_at: timeAgo(2, 'hours'),
+            claimed_by: null,
+            claimed_at: null,
+          }),
+        ])
+        .then(prrrs => Promise.all([commands.claimPrrr(), getAllPrrrs()]))
+        .then(prrrsArray => {
+          let prrr = prrrsArray[0]
+          let allPrrrs = prrrsArray[1]
+          expect(prrr.id).to.eql(33)
+          expect(prrr.owner).to.eql('anasauce')
+          expect(prrr.repo).to.eql('prrr-so-meta')
+          expect(prrr.number).to.be.a('number')
+          expect(prrr.claimed_by).to.eql('nicosesma')
+          expect(prrr.created_at).to.be.below(allPrrrs[1].created_at)
+          expect(prrr.created_at).to.be.below(allPrrrs[2].created_at)
+        })
+      })
+    })
+
   })
 
 })
