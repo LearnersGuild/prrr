@@ -10,7 +10,7 @@ describe('Commands', function(){
         name: 'Graham Campbell',
         email: 'graham@alt-three.com',
         avatar_url: 'https://avatars1.githubusercontent.com/u/2829600?v=3&s=460',
-        github_id: 123456,
+        github_id: 2829600,
         github_username: 'Graham Campbell',
         github_access_token: 'FAKE_GITHUB_ACCESS_TOKEN',
         github_refresh_token: null,
@@ -20,8 +20,8 @@ describe('Commands', function(){
         expect(user.name                ).to.eql('Graham Campbell')
         expect(user.email               ).to.eql('graham@alt-three.com')
         expect(user.avatar_url          ).to.eql('https://avatars1.githubusercontent.com/u/2829600?v=3&s=460')
-        expect(user.github_id           ).to.eql(123456)
-        expect(user.github_username     ).to.eql('Graham Campbell')
+        expect(user.github_id           ).to.eql(2829600)
+        expect(user.github_username     ).to.eql('GrahamCampbell')
         expect(user.github_access_token ).to.eql('FAKE_GITHUB_ACCESS_TOKEN')
         expect(user.github_refresh_token).to.eql(null)
         expect(user.created_at).to.be.a('date')
