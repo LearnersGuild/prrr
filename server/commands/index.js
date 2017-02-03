@@ -52,20 +52,6 @@ export default class Commands {
       .then(user => user ? user : this.createUser(userAttributes))
   }
 
-  reopenPrrr(id){
-    return this.knex
-      .update({
-        archived_at: null,
-        completed_at: null,
-        claimed_by: null,
-        claimed_at: null,
-      })
-      .table('pull_request_review_requests')
-      .where('id', id)
-      .returning('*')
-      .then(firstRecord)
-  }
-
   createPrrr({owner, repo, number}){
     return this.github.pullRequests.get({owner, repo, number})
       .catch(originalError => {
@@ -74,40 +60,46 @@ export default class Commands {
         error.status = 400
         throw error
       })
-      .then(pullRequest =>
-        this.queries.getPrrrForPullRequest(pullRequest)
-          .then(prrr => ({prrr, pullRequest}))
+      .then(() =>
+        this.knex
+          .select('id')
+          .from('pull_requests')
+          .where('owner', '=', owner)
+          .where('repo', '=', repo)
+          .where('number', '=', number)
       )
-      .then(({prrr, pullRequest}) => {
-        if (prrr) {
-          return prrr.archived_at || prrr.completed_at
-            ? this.reopenPrrr(prrr.id)
-            : prrr
-        }
-        return this.createRecord('pull_request_review_requests',{
-          owner,
-          repo,
-          number,
-          requested_by: this.currentUser.github_username,
-          created_at: new Date,
-          updated_at: new Date,
-        })
+      .then(prArray => {
+        if (prArray[0]) return prArray
+        else return this.knex
+          .table('pull_requests')
+          .insert({
+            owner,
+            repo,
+            number
+          })
+          .returning('id')
+      })
+      .then(prIdArray => {
+        const pull_request_id = prIdArray[0].id
+
+        return this.knex
+          .table('prrrs')
+          .insert({
+            pull_request_id: pull_request_id,
+            created_at: new Date
+          })
       })
   }
 
-  markPullRequestAsClaimed(prrrId){
+  markPullRequestAsClaimed(prrrId) { //rename to newPullReview
     return this.knex
-      .table('pull_request_review_requests')
-      .update({
-        claimed_by: this.currentUser.github_username,
-        claimed_at: new Date,
-        updated_at: new Date,
+      .table('reviews')
+      .insert({
+        prrr_id: prrrId,
+        github_username: this.currentUser.github_username,
+        created_at: new Date
       })
-      .where('id', prrrId)
-      .whereNull('claimed_by')
-      .whereNull('claimed_at')
-      .returning('*')
-      .then(firstRecord)
+      .then(() => this.queries.getPrrrById(prrrId))
   }
 
   claimPrrr(){
@@ -120,57 +112,46 @@ export default class Commands {
   }
 
   unclaimPrrr(prrrId){
-    return this.knex
-      .table('pull_request_review_requests')
-      .update({
-        claimed_by: null,
-        claimed_at: null,
-        updated_at: new Date,
-      })
+    return this.knex('reviews')
       .where('id', prrrId)
-      .where('claimed_by', this.currentUser.github_username)
-      .returning('*')
-      .then(firstRecord)
+      .where('github_username', this.currentUser.github_username)
+      .del()
+      .then(() => this.queries.getPrrrById(prrr_id))
   }
 
   skipPrrr(prrrId){
     logger.debug('skipPrrr', {prrrId})
+
     return this.knex
-      .table('skipped_prrrs')
-      .insert({
-        prrr_id: prrrId,
-        github_username: this.currentUser.github_username,
-        skipped_at: new Date,
+      .table('reviews')
+      .where('id', prrrId)
+      .where('github_username', this.currentUser.github_username)
+      .update({
+        skipped_at: new Date
       })
-      .catch(error => {
-        if (error.message.includes('duplicate key value violates unique constraint')) return
-        throw error
-      })
-      .then(_ => this.unclaimPrrr(prrrId))
+      .then(() => this.queries.getPrrrById(prrr_id))
       .then(skippedPrrr => {
         skippedPrrr.skipped = true
-        return this.claimPrrr()
-          .then(newClaimedPrrr => ({newClaimedPrrr, skippedPrrr}))
+
+        return ({
+          newClaimedPrrr: this.claimPrrr(prrr_id),
+          skippedPrrr
+        })
       })
   }
 
   unclaimStalePrrrs(prrr){
     return this.knex
-      .table('pull_request_review_requests')
-      .update({
-        claimed_by: null,
-        claimed_at: null,
-        updated_at: new Date,
-      })
-      .whereRaw(`claimed_at <= NOW() - '1 hour'::INTERVAL`)
-      .whereNotNull('claimed_by')
-      .whereNotNull('claimed_at')
+      .table('reviews')
+      .whereRaw(`created_at <= NOW() - '1 hour'::INTERVAL`)
       .whereNull('completed_at')
+      .whereNull('skipped_at')
+      .del()
   }
 
   archivePrrr(prrrId){
     return this.knex
-      .table('pull_request_review_requests')
+      .table('prrrs')
       .update({
         archived_at: new Date,
       })
@@ -181,7 +162,7 @@ export default class Commands {
 
   completePrrr(prrrId){
     return this.knex
-    .table('pull_request_review_requests')
+    .table('reviews')
     .update({
       completed_at: new Date,
     })
