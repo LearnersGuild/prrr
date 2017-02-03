@@ -250,50 +250,54 @@ describe('Commands', function(){
 
         return Promise.all([
           insertPrrr({
-            id: 33,
-            owner: 'anasauce',
-            repo: 'prrr-so-meta',
-            number: 45,
-            requested_by: 'anasauce',
-            created_at: timeAgo(4, 'hours'),
-            updated_at: timeAgo(4, 'hours'),
-            claimed_by: null,
-            claimed_at: null,
-          }),
-          insertPrrr({
-            id: 34,
+            id: 545,
             owner: 'ykatz',
             repo: 'prrr-be-awesome',
             number: 45,
             requested_by: 'anasauce',
             created_at: timeAgo(3, 'hours'),
             updated_at: timeAgo(50, 'minutes'),
-            claimed_by: null,
-            claimed_at: null,
           }),
           insertPrrr({
-            id: 35,
+            id: 59884,
+            owner: 'anasauce',
+            repo: 'prrr-so-meta',
+            number: 45,
+            requested_by: 'anasauce',
+            created_at: timeAgo(4, 'hours'),
+            updated_at: timeAgo(4, 'hours'),
+          }),
+          insertPrrr({
+            id: 12154864,
             owner: 'deadlyicon',
             repo: 'prrr-forevah',
             number: 45,
             requested_by: 'deadlyicon',
             created_at: timeAgo(2, 'hours'),
             updated_at: timeAgo(2, 'hours'),
-            claimed_by: null,
-            claimed_at: null,
           }),
         ])
-        .then(prrrs => Promise.all([commands.claimPrrr(), getAllPrrrs()]))
-        .then(prrrsArray => {
-          let prrr = prrrsArray[0]
-          let allPrrrs = prrrsArray[1]
-          expect(prrr.id).to.eql(33)
-          expect(prrr.owner).to.eql('anasauce')
-          expect(prrr.repo).to.eql('prrr-so-meta')
-          expect(prrr.number).to.be.a('number')
+        .then(prrrs => commands.claimPrrr())
+        .then(prrr => {
+          expect(prrr).to.not.be.null
+          expect(prrr.id).to.eql(59884)
           expect(prrr.claimed_by).to.eql('nicosesma')
-          expect(prrr.created_at).to.be.below(allPrrrs[1].created_at)
-          expect(prrr.created_at).to.be.below(allPrrrs[2].created_at)
+        })
+        .then(prrrs => commands.claimPrrr())
+        .then(prrr => {
+          expect(prrr).to.not.be.null
+          expect(prrr.id).to.eql(545)
+          expect(prrr.claimed_by).to.eql('nicosesma')
+        })
+        .then(prrrs => commands.claimPrrr())
+        .then(prrr => {
+          expect(prrr).to.not.be.null
+          expect(prrr.id).to.eql(12154864)
+          expect(prrr.claimed_by).to.eql('nicosesma')
+        })
+        .then(prrrs => commands.claimPrrr())
+        .then(prrr => {
+          expect(prrr).to.be.null
         })
       })
     })
