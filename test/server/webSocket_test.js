@@ -166,7 +166,31 @@ describe.only('WebSocket', function(){
           clearEventLog()
           // console.log(JSON.stringify(eventLog, null, 2))
         })
-
+        //client1 unclaims a prrr
+        .then(_ => {
+          client1.emit('unclaimPrrr', {prrrId: 1})
+        })
+        .then(prrr => {
+          wait(2000)
+        })
+        .then(_ => knex.select('*').from('pull_request_review_requests'))
+        .then(prrrs => {
+          const prrr = prrrs[0]
+          // expect(prrr.claimed_by).to.eql(null)
+          // expectEvent({
+          //   client: 0,
+          //   event: 'PrrrUpdated',
+          //   payload: prrr,
+          // })
+          // expectEvent({
+          //   client: 1,
+          //   event: 'PrrrUpdated',
+          //   payload: prrr,
+          // })
+          // expect(eventLog).to.have.length(3)
+          clearEventLog()
+        })
+  
     })
 
   })
