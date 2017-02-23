@@ -30,6 +30,7 @@ export default class Metrics {
       this.totalCodeReviewsPerReviewer(),
       this.averageTimeForPrrrToBeClaimed(),
       this.averageTimeForPrrrToBeCompleted(),
+      this.longestTimeForPrrrToBeReviewed(),
       this.totalNumberOfProjectsThatRequestedReviews(),
       this.averageNumberOfReviewsRequestedPerProject(),
       this.prrrs(),
@@ -41,9 +42,10 @@ export default class Metrics {
         totalCodeReviewsPerReviewer: results[1],
         averageTimeForPrrrToBeClaimed: results[2],
         averageTimeForPrrrToBeCompleted: results[3],
-        totalNumberOfProjectsThatRequestedReviews: results[4],
-        averageNumberOfReviewsRequestedPerProject: results[5],
-        prrrs: results[6],
+        longestTimeForPrrrToBeReviewed: results[4],
+        totalNumberOfProjectsThatRequestedReviews: results[5],
+        averageNumberOfReviewsRequestedPerProject: results[6],
+        prrrs: results[7],
       }
     })
   }
@@ -87,6 +89,17 @@ export default class Metrics {
       .select(
         this.knex.raw(
           `EXTRACT(EPOCH FROM AVG( AGE( completed_at::timestamp, claimed_at::timestamp )))`
+        )
+      )
+      .then(result => result[0].date_part * 1000)
+  }
+
+  longestTimeForPrrrToBeReviewed(){
+    return this
+      .query()
+      .select(
+        this.knex.raw(
+          `EXTRACT(EPOCH FROM MAX( AGE( completed_at::timestamp, created_at::timestamp )))`
         )
       )
       .then(result => result[0].date_part * 1000)
