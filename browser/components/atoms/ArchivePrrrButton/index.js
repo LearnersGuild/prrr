@@ -28,7 +28,7 @@ export default class ArchivePrrrButton extends Component {
 
 
 function confirmArchivePrrr(prrr){
-  const url = prrUrlLink()
+  const url = createPrrrLink()
   const message = `Are you sure you want to archive your\n\nPull Request Review Request for\n\n${url}`
   if (confirm(message)) archivePrrr(prrr.id)
 }

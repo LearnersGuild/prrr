@@ -3,6 +3,7 @@ import Link from '../../atoms/Link'
 import Icon from '../../atoms/Icon'
 import Date from '../../atoms/Date'
 import Button from '../../atoms/Button'
+import createPrrrLink from '../atoms/PrrrLink'
 import GithubUsername from '../../atoms/GithubUsername'
 import { archivePrrr } from '../../../actions'
 import './index.sass'
@@ -23,7 +24,7 @@ export default class PrrrsTable extends Component {
       renderAdditionalHeaders,
     } = this.props
     const rows = prrrs.map(prrr => {
-      const href = prrUrlLink()
+      const href = createPrrrLink()
       return <tr key={prrr.id}>
         <td className="PrrrsTable-pr">
           <Link href={href} target="_blank">
