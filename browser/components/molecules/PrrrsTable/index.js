@@ -23,7 +23,7 @@ export default class PrrrsTable extends Component {
       renderAdditionalHeaders,
     } = this.props
     const rows = prrrs.map(prrr => {
-      const href = `https://github.com/${prrr.owner}/${prrr.repo}/pull/${prrr.number}`
+      const href = prrUrlLink()
       return <tr key={prrr.id}>
         <td className="PrrrsTable-pr">
           <Link href={href} target="_blank">
