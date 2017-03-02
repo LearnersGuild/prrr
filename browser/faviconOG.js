@@ -3,16 +3,6 @@ import cat from './images/favicon.ico'
 import catHead from './images/favicon_head.ico'
 import state from './state'
 
-function loadCatImage(callback){
-  var catImg = document.createElement('img')
-  catImg.src = catHead
-  catImg.onLoad = function(){
-    callback(catImg)
-  }
-}
-
-
-
 let lastNumPendingPrrrs = 0
 const updateNumFavicon = (numPendingPrrrs) => {
   if (lastNumPendingPrrrs === numPendingPrrrs) return
@@ -21,18 +11,18 @@ const updateNumFavicon = (numPendingPrrrs) => {
     const linkEl = document.getElementsByClassName('favicon')[0]
     linkEl.href = cat
   } else {
+    let canvas = document.createElement('canvas')
+    canvas.width = 16
+    canvas.height = 16
 
-    loadCatImage( (catHeadImage) => {
-      let canvas = document.createElement('canvas')
-      canvas.width = 16
-      canvas.height = 16
+    let context = canvas.getContext('2d')
 
-      let context = canvas.getContext('2d')
+    let catHeadImage = document.createElement('img')
+    catHeadImage.src = catHead
 
+    catHeadImage.onload = () => {
       context.drawImage(catHeadImage, 0, 0)
       context.fillStyle = "white";
-
-
       if ( numPendingPrrrs < 10 ) {
         context.font = '12px sans-serif'
         context.fillText(numPendingPrrrs, 4.5, 13.5)
@@ -46,8 +36,7 @@ const updateNumFavicon = (numPendingPrrrs) => {
 
       const linkEl = document.getElementsByClassName('favicon')[0]
       linkEl.href = context.canvas.toDataURL()
-    })
-
+    }
   }
 }
 
