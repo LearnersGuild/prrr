@@ -3,6 +3,16 @@ import cat from './images/favicon.ico'
 import catHead from './images/favicon_head.ico'
 import state from './state'
 
+function loadCatImage(callback){
+  var catImg = document.createElement('img')
+  catImg.src = catHead
+  catImg.onLoad = function(){
+    callback(catImg)
+  }
+}
+
+
+
 let lastNumPendingPrrrs = 0
 const updateNumFavicon = (numPendingPrrrs) => {
   if (lastNumPendingPrrrs === numPendingPrrrs) return
@@ -11,18 +21,18 @@ const updateNumFavicon = (numPendingPrrrs) => {
     const linkEl = document.getElementsByClassName('favicon')[0]
     linkEl.href = cat
   } else {
-    let canvas = document.createElement('canvas')
-    canvas.width = 16
-    canvas.height = 16
 
-    let context = canvas.getContext('2d')
+    loadCatImage( (catHeadImage) => {
+      let canvas = document.createElement('canvas')
+      canvas.width = 16
+      canvas.height = 16
 
-    let catHeadImage = document.createElement('img')
-    catHeadImage.src = catHead
+      let context = canvas.getContext('2d')
 
-    catHeadImage.onload = () => {
       context.drawImage(catHeadImage, 0, 0)
       context.fillStyle = "white";
+
+
       if ( numPendingPrrrs < 10 ) {
         context.font = '12px sans-serif'
         context.fillText(numPendingPrrrs, 4.5, 13.5)
@@ -36,6 +46,26 @@ const updateNumFavicon = (numPendingPrrrs) => {
 
       const linkEl = document.getElementsByClassName('favicon')[0]
       linkEl.href = context.canvas.toDataURL()
+    })
+
+    const claimedPrrr = prrrs.claimed()
+
+      if( claimedPrr ) {
+        const { deadline } = this.props
+        const secondsRemaining = deadline.diff(moment(), 'seconds')
+        const className = `Timer ${secondsRemaining > 0 ? '' : 'Timer-out-of-time'}`
+        return <div className={className}>
+          <TimeRemaining secondsRemaining={secondsRemaining} />
+        </div>
+
+      const TimeRemaining = ({secondsRemaining}) => {
+        if (secondsRemaining <= 0) return <span>00:00:00</span>
+        const hour = Math.floor(secondsRemaining / 3600)
+        const minutes = Math.floor(secondsRemaining / 60)
+        const seconds = secondsRemaining % 60
+        const formattedTime = `${padd(hour)}:${padd(minutes)}:${padd(seconds)}`
+        return <span>{formattedTime}</span>
+      }
     }
   }
 }
