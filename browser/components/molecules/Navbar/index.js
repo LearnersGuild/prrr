@@ -3,7 +3,7 @@ import Button from '../../atoms/Button'
 import Link from '../../atoms/Link'
 import Avatar from '../../atoms/Avatar'
 import './index.sass'
-import favicon from '../../../images/favicon.ico'
+import prrrCat from '../../../images/prrrCat.ico'
 
 export default class Navbar extends Component {
 
@@ -22,7 +22,7 @@ export default class Navbar extends Component {
       </div>
       <div>
         <Link className="Navbar-logo" href="/">
-          <img src={favicon} />
+          <img src={prrrCat} />
           <span>Prrr</span>
         </Link>
       </div>
