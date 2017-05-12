@@ -33,6 +33,7 @@ if (process.env.NODE_ENV !== 'production'){
   logger.add(
     winston.transports.File,
     {
+      colorize: false,
       filename: path.resolve(LOG_DIRECTORY, `${process.env.NODE_ENV}.log`)
     }
   )
